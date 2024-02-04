@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_ACCOUNT: "339713007259"
+      DB_PASSWORD: "123qweASF!@#"
+      DB_USER: "user"
+      DB_NAME: "db"
+      DB_HOST: "localhost"
+      DB_PORT: "5432"
+      APP_NAME: "overview"
+      APP_VERSION: "initial"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules

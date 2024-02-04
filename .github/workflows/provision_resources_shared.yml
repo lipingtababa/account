@@ -1,0 +1,55 @@
+name: Provision infrastructures
+run-name: Provisioning infra for ${{ github.repository }}
+permissions:
+    id-token: write
+    contents: read
+on: 
+  # Deploy infrastructure for a new environment
+  # Trigged by a manual action
+  workflow_dispatch:
+    inputs:
+      AWS_REGION:
+        description: 'AWS Region'
+        required: true
+        type: string
+      AWS_ACCOUNT:
+        description: 'AWS Account ID'
+        required: true
+        type: string
+      STAGE:
+        description: 'Stage of the cluster'
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repo
+        uses: actions/checkout@v4
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT }}:role/github-actions-admin
+          role-session-name: github
+          aws-region: ${{ inputs.AWS_REGION }}
+
+      - name: push image to ECR
+        run: |
+          aws ecr get-login-password --region ${{ inputs.AWS_REGION }} | docker login --username AWS --password-stdin ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com
+          docker build -t ${{ github.repository }} .
+          docker tag ${{ github.repository }}:latest ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ github.repository }}:${{ github.sha }}
+          docker push ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ github.repository }}:${{ github.sha }}
+
+      - name: Provision infrastructure
+        run: |
+          cd infrastructures/aws
+          terraform init
+          terraform apply -auto-approve \
+                -var "aws_region=${{ inputs.AWS_REGION }}" \
+                -var "aws_account=${{ inputs.AWS_ACCOUNT }}" \
+                -var "stage=${{ inputs.STAGE }}" \
+                -var "app_version=${{ github.sha }}" \
+                -var "app_name=${{ github.repository }}"
+
+      
