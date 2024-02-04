@@ -37,32 +37,35 @@ jobs:
           role-session-name: github
           aws-region: ${{ inputs.AWS_REGION }}
 
-      - name: debug
+      - name: Prepare environment
         run: |
           echo ${{ inputs.AWS_REGION }}
           echo ${{ inputs.AWS_ACCOUNT }}
           echo ${{ inputs.STAGE }}
-          echo ${{ github.sha }}
-          echo ${{ github.repository }}
-          pwd
-          ls -la
+
+          # set environment variables for the next steps
+          APP_NAME=`echo ${{ github.repository }} | cut -d'/' -f2`
+          echo "APP_NAME=${APP_NAME}"
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
+
+          APP_VERSION=`echo ${{ github.sha }} | cut -c1-7`
+          echo "APP_VERSION=${APP_VERSION}"
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
       - name: push image to ECR
         run: |
           aws ecr get-login-password --region ${{ inputs.AWS_REGION }} | docker login --username AWS --password-stdin ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com
-          docker build -t ${{ github.repository }} .
-          docker tag ${{ github.repository }}:latest ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ github.repository }}:${{ github.sha }}
-          docker push ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${{ github.repository }}:${{ github.sha }}
+          docker build -t ${APP_NAME} .
+          docker tag ${APP_NAME}:latest ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${APP_NAME}:${APP_VERSION}
+          docker push                      ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${APP_NAME}:${APP_VERSION}
 
       - name: Provision infrastructure
         run: |
-          cd infrastructures/aws
+          cd infrastructure/aws
           terraform init
           terraform apply -auto-approve \
                 -var "aws_region=${{ inputs.AWS_REGION }}" \
                 -var "aws_account=${{ inputs.AWS_ACCOUNT }}" \
                 -var "stage=${{ inputs.STAGE }}" \
-                -var "app_version=${{ github.sha }}" \
-                -var "app_name=${{ github.repository }}"
-
-      
+                -var "app_version=${APP_VERSION}" \
+                -var "app_name=${APP_NAME}"
