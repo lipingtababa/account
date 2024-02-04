@@ -12,14 +12,17 @@ on:
         description: 'AWS Region'
         required: true
         type: string
+        default: 'us-east-1'
       AWS_ACCOUNT:
         description: 'AWS Account ID'
         required: true
         type: string
+        default: '339713007259'
       STAGE:
         description: 'Stage of the cluster'
         required: true
         type: string
+        default: 'dev'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,6 +36,16 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT }}:role/github-actions-admin
           role-session-name: github
           aws-region: ${{ inputs.AWS_REGION }}
+
+      - name: debug
+        run: |
+          echo ${{ inputs.AWS_REGION }}
+          echo ${{ inputs.AWS_ACCOUNT }}
+          echo ${{ inputs.STAGE }}
+          echo ${{ github.sha }}
+          echo ${{ github.repository }}
+          pwd
+          ls -la
 
       - name: push image to ECR
         run: |
