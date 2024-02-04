@@ -11,9 +11,11 @@ if [ "$AWS_REGION"  != "localhost" ]; then
     export DB_PASSWORD=${DB_PASSWORD}
     export DB_HOST=${DB_HOST}
     export DB_PORT=${DB_PORT}
-else
-    # All env variables should be set in local environment
+
+    echo "DB_HOST=${DB_HOST}"
+    echo "DB_PORT=${DB_PORT}"
+
 fi
 
 # start index.js
-node ./src/index.js
+node --trace-warnings dist/index.ts

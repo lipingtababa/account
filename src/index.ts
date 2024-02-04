@@ -53,3 +53,19 @@ app.post('/card/activate', (req: Request, res: Response) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+// Also listens on 8081 for heachcheck
+const healthcheckApp = express();
+healthcheckApp.use(express.json());
+
+healthcheckApp.get('/ping', (req: Request, res: Response) => {
+    res.json({
+        status: "success",
+        message: "Server is running."
+    });
+});
+
+healthcheckApp.listen(81, () => {
+    console.log(`Health check server is running on http://localhost:8081`);
+});

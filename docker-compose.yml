@@ -5,12 +5,12 @@ services:
     ports:
       - "80:80"
     environment:
-      AWS_REGION: "us-east-1"
+      AWS_REGION: "localhost"
       AWS_ACCOUNT: "339713007259"
       DB_PASSWORD: "123qweASF!@#"
       DB_USER: "user"
-      DB_NAME: "db"
-      DB_HOST: "localhost"
+      DB_NAME: "overview"
+      DB_HOST: "dbserver"
       DB_PORT: "5432"
       APP_NAME: "overview"
       APP_VERSION: "initial"

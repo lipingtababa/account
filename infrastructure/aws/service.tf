@@ -15,12 +15,46 @@ resource "aws_ecs_task_definition" "the_task_definition" {
       cpu       = 256,
       memory    = 512,
       essential = true,
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:81/ping || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      },
       portMappings = [
         {
           containerPort = 80,
           hostPort      = 80,
           protocol      = "tcp"
         },
+        {
+          containerPort = 81,
+          hostPort      = 81,
+          protocol      = "tcp"
+        }
+      ],
+      environment = [
+        {
+          name  = "AWS_REGION"
+          value = "${var.aws_region}"
+        },
+        {
+          name  = "AWS_ACCOUNT"
+          value = "${var.aws_account}"
+        },
+        {
+          name  = "STAGE"
+          value = "${var.stage}"
+        },
+        {
+          name  = "APP_NAME"
+          value = "${var.app_name}"
+        },
+        {
+          name  = "APP_VERSION"
+          value = "${var.app_version}"
+        }
       ],
     },
   ])

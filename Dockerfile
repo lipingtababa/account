@@ -8,6 +8,8 @@ RUN yarn install
 
 RUN yarn build
 
-# EXPOSE 80
+EXPOSE 80
+EXPOSE 81
 
-# CMD ["node", "dist/app.js"]
+# start with entrypoint.sh
+CMD ["sh", "./init/entrypoint.sh"]
