@@ -6,7 +6,11 @@ resource "aws_iam_role" "pod_role" {
   "Statement": [
     {
       "Principal": {
-        "Service": "pods.eks.amazonaws.com"
+        "Service": [
+          "pods.eks.amazonaws.com",
+          "ecs-tasks.amazonaws.com",
+          "ecs.amazonaws.com"
+        ]
       },
       "Action": [
                 "sts:AssumeRole",
