@@ -1,5 +1,5 @@
-name: Provision infrastructures
-run-name: Provisioning infra for ${{ github.repository }}
+name: Provision service
+run-name: Provisioning ${{ github.repository }}
 permissions:
     id-token: write
     contents: read
