@@ -4,25 +4,15 @@ permissions:
     id-token: write
     contents: read
 on: 
-  # Deploy infrastructure for a new environment
-  # Trigged by a manual action
-  workflow_dispatch:
-    inputs:
-      AWS_REGION:
-        description: 'AWS Region'
-        required: true
-        type: string
-        default: 'us-east-1'
-      AWS_ACCOUNT:
-        description: 'AWS Account ID'
-        required: true
-        type: string
-        default: '339713007259'
-      STAGE:
-        description: 'Stage of the cluster'
-        required: true
-        type: string
-        default: 'dev'
+  # Deploy ECS cluster, ECS service and dependencies(DB) for an environment    
+  push:
+    branches:
+      - main
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT: 339713007259
+  STAGE: dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,15 +23,15 @@ jobs:
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT }}:role/github-actions-admin
+          role-to-assume: "arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-admin"
           role-session-name: github
-          aws-region: ${{ inputs.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Prepare environment
         run: |
-          echo ${{ inputs.AWS_REGION }}
-          echo ${{ inputs.AWS_ACCOUNT }}
-          echo ${{ inputs.STAGE }}
+          echo ${{ env.AWS_REGION }}
+          echo ${{ env.AWS_ACCOUNT }}
+          echo ${{ env.STAGE }}
 
           # set environment variables for the next steps
           APP_NAME=`echo ${{ github.repository }} | cut -d'/' -f2`
@@ -54,18 +44,18 @@ jobs:
 
       - name: push image to ECR
         run: |
-          aws ecr get-login-password --region ${{ inputs.AWS_REGION }} | docker login --username AWS --password-stdin ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com
-          docker build -t ${APP_NAME} .
-          docker tag ${APP_NAME}:latest ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${APP_NAME}:${APP_VERSION}
-          docker push                      ${{ inputs.AWS_ACCOUNT }}.dkr.ecr.${{ inputs.AWS_REGION }}.amazonaws.com/${APP_NAME}:${APP_VERSION}
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          docker build -t ${{ env.APP_NAME }} .
+          docker tag ${{ env.APP_NAME }}:latest ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
+          docker push                           ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
 
       - name: Provision infrastructure
         run: |
           cd infrastructure/aws
           terraform init
           terraform apply -auto-approve \
-                -var "aws_region=${{ inputs.AWS_REGION }}" \
-                -var "aws_account=${{ inputs.AWS_ACCOUNT }}" \
-                -var "stage=${{ inputs.STAGE }}" \
-                -var "app_version=${APP_VERSION}" \
-                -var "app_name=${APP_NAME}"
+                -var "aws_region=${{ env.AWS_REGION }}" \
+                -var "aws_account=${{ env.AWS_ACCOUNT }}" \
+                -var "stage=${{ env.STAGE}}" \
+                -var "app_version=${{ env.APP_VERSION }}" \
+                -var "app_name=${{ env.APP_NAME }}"
