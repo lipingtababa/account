@@ -1,3 +1,6 @@
-./node_modules
-./dist
-./infrastructure/aws/.terraform
+node_modules/
+dist/
+infrastructure/aws/.terraform/
+infrastructure/aws/.terraform.lock.hcl
+yarn-error.log
+tsconfig.jsonyarn
