@@ -1,5 +1,3 @@
-
-
 resource "aws_ecs_task_definition" "the_task_definition" {
   family                   = "${var.app_name}"
   network_mode             = "awsvpc"
@@ -90,5 +88,8 @@ resource "aws_ecs_service" "the_ecs_service" {
     enable   = true
     rollback = true
   }
+}
 
+resource "aws_cloudwatch_log_group" "the_log_group" {
+  name = "/ecs/${var.app_name}"
 }

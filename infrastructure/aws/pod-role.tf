@@ -43,3 +43,14 @@ resource "aws_iam_role_policy_attachment" "pod_role_ssm" {
   role       = aws_iam_role.pod_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "pod_role_cloudwatch" {
+  role       = aws_iam_role.pod_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "pod_role_ecs" {
+  role       = aws_iam_role.pod_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
