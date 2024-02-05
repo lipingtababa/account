@@ -22,6 +22,14 @@ resource "aws_ecs_task_definition" "the_task_definition" {
         retries     = 3
         startPeriod = 60
       },
+      logConfiguration = {
+        logDriver = "awslogs",
+        options   = {
+          "awslogs-group"         = "/ecs/${var.app_name}",
+          "awslogs-region"        = "${var.aws_region}",
+          "awslogs-stream-prefix" = "web"
+        }
+      },
       portMappings = [
         {
           containerPort = 80,
