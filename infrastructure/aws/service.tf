@@ -5,6 +5,7 @@ resource "aws_ecs_task_definition" "the_task_definition" {
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = aws_iam_role.pod_role.arn
+  task_role_arn            = aws_iam_role.pod_role.arn
 
   container_definitions = jsonencode([
     {
@@ -67,7 +68,7 @@ resource "aws_ecs_task_definition" "the_task_definition" {
 }
 
 resource "aws_security_group" "service" {
-  name        = "${var.app_name}-service"
+  name        = "${var.app_name}"
   description = "ECS Service security group"
   vpc_id      = local.vpc_id
 
