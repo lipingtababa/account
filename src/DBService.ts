@@ -10,11 +10,14 @@ export class DBService {
 
   constructor() {
     this.pool = new Pool.Pool({
-      user: process.env.APP_NAME || 'qred',
-      host: process.env.DB_HOST || 'localhost',
-      database: process.env.APP_NAME || 'qred',
+      user: process.env.APP_NAME,
+      host: process.env.DB_HOST,
+      database: process.env.APP_NAME,
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+      ssl: {
+        rejectUnauthorized: false
+      }
     });
   }
 
