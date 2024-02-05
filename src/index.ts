@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import AWS from 'aws-sdk';
 import { DBService } from './DBService.js';
+import { NoAccountException } from './exceptions.js';
+import { logger } from './utils.js';
 
 const PORT = 80;
 const HEALTHCHECK_PORT = 81;
@@ -40,10 +42,25 @@ app.get('/account/overview/:accountid', async (req: Request, res: Response) => {
 
         const transactionHistory = await dbService.getTransactionHistory(accountId, 10);
         accountOverview['transactionHistory'] = transactionHistory;
-    } catch (error) {
-        console.error(error);
     }
-    
+    catch (error) {
+        if (error instanceof NoAccountException) {
+            logger.info(`Account ${accountId} not found.`);
+            res.status(404).json({
+                status: "error",
+                message: error.message
+            });
+            return;
+        }
+
+        logger.error(`Failed to get account overview: ${error}`);
+        res.status(500).json({
+            status: "error",
+            message: "Failed to get account overview."
+        });
+        return;
+    }
+
     res.json({
         status: "success",
         data: accountOverview
