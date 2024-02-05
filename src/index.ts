@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
 import AWS from 'aws-sdk';
 import { DBService } from './DBService.js';
 import { NoAccountException } from './exceptions.js';
@@ -18,7 +17,6 @@ app.get('/ping', (req: Request, res: Response) => {
         data: greeting
     });
 });
-    
 
 app.get('/account/overview/:accountid', async (req: Request, res: Response) => {
     const accountId = req.params.accountid;
