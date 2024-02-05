@@ -9,6 +9,15 @@ const HEALTHCHECK_PORT = 81;
 const app = express();
 app.use(express.json());
 
+app.get('/ping', (req: Request, res: Response) => {
+    const greeting = {"greeting": "Hello, World!"}
+    res.json({
+        status: "success",
+        data: greeting
+    });
+});
+    
+
 app.get('/account/overview/:accountid', async (req: Request, res: Response) => {
     const accountId = req.params.accountid;
 

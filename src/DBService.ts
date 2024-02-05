@@ -1,6 +1,9 @@
 import process from 'process';
 import { AccountOverview, Card, Invoice, Transaction } from './interfaces.js';
 import Pool from 'pg';
+import { NoAccountException } from './exceptions.js';
+import { assert } from 'console';
+import { logger } from './utils.js';
 
 export class DBService {
   private pool: Pool.Pool;
@@ -18,12 +21,22 @@ export class DBService {
   async getAccountOverview(accountId: string): Promise<AccountOverview> {
     const query = `SELECT account_id, account_name, total_spend, remaining_spend FROM accounts WHERE account_id = $1`;
     const values = [accountId];
+
+    let res;
     try {
-      const res = await this.pool.query(query, values);
-      return res.rows[0];
+      res = await this.pool.query(query, values);
     } catch (error) {
-      throw new Error(`Failed to get account overview: ${error}`);
+      logger.info(`Failed to get account overview from db: ${error}`);
+      throw error;
     }
+
+    if (res.rows.length === 0) {
+      throw new NoAccountException(`Account ${accountId} not found.`)
+    }
+
+    // accountID is the primary key, so we should only get 1 row
+    assert(res.rows.length === 1, `Expected 1 row, got ${res.rows.length}`);
+    return res.rows[0];
   }
 
   async getTransactionHistory(accountId: string, limit: number): Promise<Transaction[]> {

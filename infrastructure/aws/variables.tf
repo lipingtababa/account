@@ -37,5 +37,6 @@ terraform {
     bucket = "lipingtababa-tf-statefiles"
     key    = "qoverview/terraform.tfstate"
     region = "us-east-1"
+    dynamodb_table = "lipingtababa-terraform-lock-table"
   }
 }
