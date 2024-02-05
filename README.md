@@ -13,3 +13,14 @@ Backend of a business credit service
 - Use flyaway or liquibase to integrate DB management into the CI/CD pipeline. At this moment, tables are created manually.
 - Add customized security groups for containers and DBs.
 - The infrastructure should be split into 3 parts: the foundation(ECR, cluster), the service, the dependencies(DB, S3)
+
+
+# CI/CD
+
+# Observability
+
+# Scalability
+
+# Resiliency
+
+

@@ -1,5 +1,5 @@
 import process from 'process';
-import { AccountOverview, Card, Invoice, Transaction } from './interfaces';
+import { AccountOverview, Card, Invoice, Transaction } from './interfaces.js';
 import Pool from 'pg';
 
 export class DBService {

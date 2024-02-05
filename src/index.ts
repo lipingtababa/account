@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import AWS from 'aws-sdk';
-import {DBService} from './DBService';
+import { DBService } from './DBService.js';
 
 const PORT = 80;
+const HEALTHCHECK_PORT = 81;
 
 const app = express();
 app.use(express.json());
@@ -40,8 +41,6 @@ app.get('/account/overview/:accountid', async (req: Request, res: Response) => {
     });
 });
 
-app.use('/customer-service/contact', express.static(path.join(__dirname, 'public')));
-
 app.post('/card/activate', (req: Request, res: Response) => {
     const { cardNumber, customerId } = req.body;
     res.json({
@@ -55,7 +54,7 @@ app.listen(PORT, () => {
 });
 
 
-// Also listens on 8081 for heachcheck
+// Also listens on 81 for heachcheck
 const healthcheckApp = express();
 healthcheckApp.use(express.json());
 
@@ -66,6 +65,6 @@ healthcheckApp.get('/ping', (req: Request, res: Response) => {
     });
 });
 
-healthcheckApp.listen(81, () => {
-    console.log(`Health check server is running on http://localhost:8081`);
+healthcheckApp.listen(HEALTHCHECK_PORT, () => {
+    console.log(`Health check server is running on http://localhost:${HEALTHCHECK_PORT}`);
 });

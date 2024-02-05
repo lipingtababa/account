@@ -18,4 +18,4 @@ if [ "$AWS_REGION"  != "localhost" ]; then
 fi
 
 # start index.js
-node --trace-warnings dist/index.ts
+yarn start
