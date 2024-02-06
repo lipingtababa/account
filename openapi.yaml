@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: Account Overview API
+  version: 0.1.0
+  description: API for fetching account overview information.
+servers:
+  - url: http://credit-2095233856.us-east-1.elb.amazonaws.com/api/v1/
+    description: temp server
+paths:
+  /account/overview/{accountId}:
+    get:
+      summary: Get account overview by account ID
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      responses:
+        '200':
+          description: Successfully retrieved account overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account_id:
+                    type: string
+                  account_name:
+                    type: string
+                  total_spend:
+                    type: number
+                    format: decimal
+                  remaining_spend:
+                    type: number
+                    format: decimal
+                  cards:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        card_id:
+                          type: string
+                        accountd_id:
+                          type: string
+                        image_url:
+                          type: string
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        transaction_id:
+                          type: string
+                        account_id:
+                          type: string
+                        amount:
+                          type: number
+                          format: decimal
+                        date:
+                          type: string
+                          format: date
+                        description:
+                          type: string
+                  invoices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        invoice_id:
+                          type: string
+                        account_id:
+                          type: string
+                        amount:
+                          type: number
+                          format: decimal
+                        due_date:
+                          type: string
+                          format: date
+                        status:
+                          type: string
+        '404':
+          description: Account not found
+        '500':
+          description: Internal server error

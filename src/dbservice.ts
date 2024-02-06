@@ -1,5 +1,5 @@
 import process from 'process';
-import { AccountOverview, Card, Invoice, Transaction } from './interfaces.js';
+import { AccountDetail, Card, Invoice, TransactionsCollection } from './interfaces.js';
 import Pool from 'pg';
 import { NoAccountException } from './exceptions.js';
 import { assert } from 'console';
@@ -21,7 +21,7 @@ export class DBService {
     });
   }
 
-  async getAccountOverview(accountId: string): Promise<AccountOverview> {
+  async getAccountDetail(accountId: string): Promise<AccountDetail> {
     const query = `SELECT account_id, account_name, total_spend, remaining_spend FROM accounts WHERE account_id = $1`;
     const values = [accountId];
 
@@ -42,36 +42,48 @@ export class DBService {
     return res.rows[0];
   }
 
-  async getTransactionHistory(accountId: string, limit: number): Promise<Transaction[]> {
-    const query = `SELECT transaction_id, receiving_account_id, sending_account_id, amount, date FROM transactions WHERE sending_account_id = $1 OR receiving_account_id = $1 limit $2`;
-    const values = [accountId, limit];
+  async getTransactionHistory(accountId: string, limit: number): Promise<TransactionsCollection> {
+    const listQuery = `SELECT transaction_id, account_id, amount, date FROM transactions WHERE account_id = $1 limit $2`;
+    const listValues = [accountId, limit];
+
+    const numQuery = `SELECT count(*) FROM transactions WHERE account_id = $1`;
+    const numValues = [accountId];
+
     try {
-      const res = await this.pool.query(query, values);
-      return res.rows;
+      const trans =  await this.pool.query(listQuery, listValues);
+      const num = await this.pool.query(numQuery, numValues);
+      
+      return {
+        total_num_of_transactions: parseInt(num.rows[0].count),
+        transactions: trans.rows
+      };
     } catch (error) {
-      throw new Error(`Failed to get transaction history: ${error}`);
+      logger.debug(`Failed to get transaction history from db: ${error}`);
+      throw error;
     }
   }
 
-  async getCards(accountId: string): Promise<Card[]> {
-    const query = `SELECT card_id, account_id, image_arn FROM cards WHERE account_id = $1`;
+  async getCardsByAccountId(accountId: string): Promise<Card[]> {
+    const query = `SELECT card_id, account_id, image_uri FROM cards WHERE account_id = $1`;
     const values = [accountId];
     try {
       const res = await this.pool.query(query, values);
       return res.rows;
     } catch (error) {
-      throw new Error(`Failed to get cards: ${error}`);
+      logger.debug(`Failed to get cards from db: ${error}`);
+      throw error;
     }
   }
 
   async getInvoices(accountId: string): Promise<Invoice[]> {
-    const query = `SELECT invoice_id, receiving_account_id, sending_account_id, amount, issue_date, due_date FROM invoices WHERE receiving_account_id = $1 OR sending_account_id = $1`;
+    const query = `SELECT invoice_id, account_id, amount, due_date FROM invoices WHERE account_id = $1`;
     const values = [accountId];
     try {
       const res = await this.pool.query(query, values);
       return res.rows;
     } catch (error) {
-      throw new Error(`Failed to get invoices: ${error}`);
+      logger.debug(`Failed to get invoices from db: ${error}`);
+      throw error;
     }
   }
 }

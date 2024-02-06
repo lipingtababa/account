@@ -26,6 +26,13 @@ jobs:
           role-to-assume: "arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-admin"
           role-session-name: github
           aws-region: ${{ env.AWS_REGION }}
+      
+      - name: unit test
+        run: |
+          echo "Running unit tests"
+          # run unit tests here
+          yarn swagger ./openapi.yaml
+          yarn lint
 
       - name: Prepare environment
         run: |
