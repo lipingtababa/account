@@ -38,26 +38,5 @@
     "supertest": "^6.3.4",
     "swagger-cli": "^4.0.4",
     "typescript": "^5.3.3"
-  },
-  "jest": {
-    "verbose": true,
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      "@babel/preset-typescript"
-    ],
-    "testEnvironment": "node",
-    "transform": {
-      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ]
   }
 }
