@@ -27,11 +27,10 @@ jobs:
           role-session-name: github
           aws-region: ${{ env.AWS_REGION }}
       
-      - name: unit test
+      - name: linting and unit testing
         run: |
           echo "Running unit tests"
-          # run unit tests here
-          yarn swagger ./openapi.yaml
+          yarn install
           yarn lint
 
       - name: Prepare environment

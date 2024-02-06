@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node --trace-warnings dist/index.js",
-    "lint": "eslint . --ext .ts",
+    "lint": "swagger-cli validate openapi.yaml; eslint . --ext .ts",
     "test": "jest dist/",
     "clean": "rm -rf dist node_modules"
   },
