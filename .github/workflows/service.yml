@@ -58,6 +58,7 @@ jobs:
       - name: Provision infrastructure
         run: |
           cd infrastructure/aws
+          envsubst <  provider.tf.tpl >provider.tf
           terraform init
           terraform apply -auto-approve \
                 -var "aws_region=${{ env.AWS_REGION }}" \

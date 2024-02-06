@@ -31,12 +31,3 @@ variable "app_version" {
   type        = string
   default     = "initial"
 }
-
-terraform {
-  backend "s3" {
-    bucket = "lipingtababa-tf-statefiles"
-    key    = "qoverview/terraform.tfstate"
-    region = "us-east-1"
-    dynamodb_table = "lipingtababa-terraform-lock-table"
-  }
-}
