@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:18.3.0
 
 RUN apt-get update && apt-get install -y awscli jq
 

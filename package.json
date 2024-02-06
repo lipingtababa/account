@@ -6,6 +6,9 @@
   "repository": "https://github.com/lipingtababa/qoverview",
   "author": "Ma Chi <hellomarch@gmail.com>",
   "license": "GPL-2.0",
+  "engines": {
+    "node": ">=18.3.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node --trace-warnings dist/index.js",
