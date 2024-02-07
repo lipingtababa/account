@@ -92,10 +92,11 @@ A decent infrastructure architecture is provided out of box.
 - A common logger is provided as a module.
 - In worst case, we can rebuild the whole system in another region.
 
-
 # TODO
 - Run db operations and S3 presigned-url operation in parallel.
 - Refine IAM policies to apply least-priviledges-principle.
 - Use flyaway or liquibase to integrate DB management into the CI/CD pipeline. At this moment, tables are created manually.
 - Add customized security groups for containers and DBs.
 - The infrastructure should be split into 3 parts: the foundation(ECR, cluster), the service, the dependencies(DB, S3)
+- HTTPS is not used since certificate doesn't use a pay-as-you-use pricing model.
+- Communication among services are not encrypted.
