@@ -11,27 +11,27 @@ export class RpcClient {
 
     constructor() {
         this.accountClient = Axios.create({
-            baseURL: 'http://account:80',
+            baseURL: 'http://account.qred:80',
             timeout: 1000,
         });
 
         this.transactionsClient = Axios.create({
-            baseURL: 'http://transaction:80',
+            baseURL: 'http://transaction.qred:80',
             timeout: 1000,
         });
 
         this.cardsClient = Axios.create({
-            baseURL: 'http://card:80',
+            baseURL: 'http://card.qred:80',
             timeout: 1000,
         });
 
         this.invoicesClient = Axios.create({
-            baseURL: 'http://invoice:80',
+            baseURL: 'http://invoice.qred:80',
             timeout: 1000,
         });
 
         this.customerClient = Axios.create({
-            baseURL: 'http://customer:80',
+            baseURL: 'http://customer.qred:80',
             timeout: 1000,
         });
     }
