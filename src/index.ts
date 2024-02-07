@@ -71,6 +71,14 @@ businessApp.post('/card/activate', (req: Request, res: Response) => {
     });
 });
 
+businessApp.get('/customer/contact_page', (req: Request, res: Response) => {
+    // TODO we should return a form for the customer to fill out
+    res.json({
+        status: "success",
+        message: "Contact page for customer."
+    });
+});
+
 businessApp.post('/customer/contact', (req: Request, res: Response) => {
     // accept a form of contact and a message
     const { contact, message } = req.body;
