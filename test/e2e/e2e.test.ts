@@ -1,6 +1,5 @@
 import {describe, expect} from '@jest/globals';
 import axios from 'axios';
-import { logger } from '../../src/utils.js';
 
 describe('account service', () => {
   const domain = "http://account-182883838.us-east-1.elb.amazonaws.com:80";
@@ -13,7 +12,7 @@ describe('account service', () => {
         expect(r.status).toBe(200);
       })
       .catch(e => {
-        logger.error(e);
+        console.log(e);
         expect(e).toBeNull();
       });
   });
@@ -21,7 +20,7 @@ describe('account service', () => {
   test('It should return 404 if no account', async() => {
     const apiUrl = domain+"/account/overview/nonexistent";
     await axios.get(apiUrl).catch(e => {
-        logger.error(e);
+        console.log(e);
         expect(e.response.status).toBe(404);
       });
   });
@@ -43,7 +42,7 @@ describe('account service', () => {
         expect(realData.invoices.length).toBe(0);
       })
       .catch(e => {
-        logger.error(e);
+        console.log(e);
         expect(e).toBeNull();
       });
   });
@@ -62,7 +61,7 @@ describe('customer-service service', () => {
         expect(r.status).toBe(200);
       })
       .catch(e => {
-        logger.error(e);
+        console.log(e);
         expect(e).toBeNull();
       });
   });
@@ -75,7 +74,7 @@ describe('customer-service service', () => {
         expect(r.status).toBe(200);
       })
       .catch(e => {
-        logger.error(e);
+        console.log(e);
         expect(e).toBeNull();
       });
 });
