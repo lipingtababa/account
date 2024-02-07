@@ -38,7 +38,7 @@ export class RpcClient {
 
     async getCardsByAccountId(accountId: string): Promise<Card[]> {
         try {
-            const response = await this.cardsClient.get(`/card/${accountId}`);
+            const response = await this.cardsClient.get(`/cards/${accountId}`);
             return response.data;
         } catch (error) {
             logger.debug(`Failed to get cards: ${error}`);
