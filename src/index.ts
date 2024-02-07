@@ -13,10 +13,10 @@ const HEALTHCHECK_PORT = 81;
 
 AWS.config.update({region: process.env.AWS_REGION});
 
-export const businessRouter = express();
-businessRouter.use(express.json());
+export const businessApp = express();
+businessApp.use(express.json());
 
-businessRouter.get('/account/overview/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/account/overview/:accountid', async (req: Request, res: Response) => {
     const accountId = req.params.accountid;
 
     const dbService = new DBService();
@@ -59,7 +59,7 @@ businessRouter.get('/account/overview/:accountid', async (req: Request, res: Res
     }
 });
 
-businessRouter.post('/card/activate', (req: Request, res: Response) => {
+businessApp.post('/card/activate', (req: Request, res: Response) => {
     const { card_id, account_id } = req.body;
     // TODO Validate input
 
@@ -71,7 +71,7 @@ businessRouter.post('/card/activate', (req: Request, res: Response) => {
     });
 });
 
-businessRouter.post('/customer/contact', (req: Request, res: Response) => {
+businessApp.post('/customer/contact', (req: Request, res: Response) => {
     // accept a form of contact and a message
     const { contact, message } = req.body;
     //TODO validate input
@@ -84,7 +84,7 @@ businessRouter.post('/customer/contact', (req: Request, res: Response) => {
     });
 });
 
-businessRouter.get('/card/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/card/byaccountid/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const dbClient = new DBService();
     const cards = await dbClient.getCardsByAccountId(accountid);
@@ -100,7 +100,7 @@ businessRouter.get('/card/byaccountid/:accountid', async (req: Request, res: Res
     });
 });
 
-businessRouter.get('/invoice/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/invoice/byaccountid/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const dbClient = new DBService();
     const invoices = await dbClient.getInvoices(accountid);
@@ -111,7 +111,7 @@ businessRouter.get('/invoice/byaccountid/:accountid', async (req: Request, res: 
     });
 });
 
-businessRouter.get('/transactions/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/transactions/byaccountid/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : MAX_NUM_OF_TRANSACTIONS;
     const dbClient = new DBService();
@@ -138,18 +138,18 @@ const healthcheckFunction =  (req: Request, res: Response) => {
         message: `Server ${process.env.APP_NAME}:${process.env.APP_VERSION} running in ${process.env.AWS_REGION}.`
     });
 }
-businessRouter.get('/ping', healthcheckFunction);
+businessApp.get('/ping', healthcheckFunction);
 
-businessRouter.listen(PORT, () => {
+businessApp.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // Also listens on 81 for heachcheck
-const healthcheckRouter = express();
-healthcheckRouter.use(express.json());
+const healthcheckApp = express();
+healthcheckApp.use(express.json());
 
-healthcheckRouter.get('/ping', healthcheckFunction);
+healthcheckApp.get('/ping', healthcheckFunction);
 
-healthcheckRouter.listen(HEALTHCHECK_PORT, () => {
+healthcheckApp.listen(HEALTHCHECK_PORT, () => {
     console.log(`Health check server is running on http://localhost:${HEALTHCHECK_PORT}`);
 });
