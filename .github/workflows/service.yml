@@ -72,4 +72,5 @@ jobs:
           # wait for 4 minites for the service to be up
           sleep 240
           echo "Running e2e tests"
+          yarn build
           yarn test
