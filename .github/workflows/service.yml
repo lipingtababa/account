@@ -55,7 +55,7 @@ jobs:
           docker tag ${{ env.APP_NAME }}:latest ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
           docker push                           ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.APP_NAME }}:${{ env.APP_VERSION }}
 
-      - name: Provision infrastructure
+      - name: Update infrastructure and service
         run: |
           cd infrastructure/aws
           envsubst <  provider.tf.tpl >provider.tf
@@ -66,3 +66,10 @@ jobs:
                 -var "stage=${{ env.STAGE}}" \
                 -var "app_version=${{ env.APP_VERSION }}" \
                 -var "app_name=${{ env.APP_NAME }}"
+
+      - name: run e2e test suite
+        run: |
+          # wait for 10 minites for the service to be up
+          sleep 600
+          echo "Running e2e tests"
+          yarn test
