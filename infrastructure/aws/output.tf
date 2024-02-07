@@ -1,4 +1,7 @@
+output "alb_address" {
+  value = aws_lb.lb.dns_name
+}
 
-output "db_endpoint" {
-  value = aws_db_instance.db.endpoint
+output "service_name" {
+  value = aws_ecs_service.the_service.name
 }
