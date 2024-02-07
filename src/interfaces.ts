@@ -4,7 +4,7 @@ export interface AccountOverview {
     total_spend: number;                    // The upper limit of the account
     remaining_spend: number;                // The remaining amount of the account
     cards: Card[];                          // The cards associated with this account
-    transactions: TransactionsCollection;   // The last N transactions for this account
+    transaction_collection: TransactionsCollection;   // The last N transactions for this account
     invoices: Invoice[];                    // The invoices for this account
 }
 

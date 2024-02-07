@@ -46,23 +46,28 @@ paths:
                           type: string
                         image_url:
                           type: string
-                  transactions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        transaction_id:
-                          type: string
-                        account_id:
-                          type: string
-                        amount:
-                          type: number
-                          format: decimal
-                        date:
-                          type: string
-                          format: date
-                        description:
-                          type: string
+                  transaction_collection:
+                    type: object
+                    properties:
+                      total_num_of_transactions:
+                        type: number
+                      transactions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            transaction_id:
+                              type: string
+                            account_id:
+                              type: string
+                            amount:
+                              type: number
+                              format: decimal
+                            date:
+                              type: string
+                              format: date
+                            description:
+                              type: string
                   invoices:
                     type: array
                     items:
