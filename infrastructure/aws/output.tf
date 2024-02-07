@@ -3,5 +3,5 @@ output "alb_address" {
 }
 
 output "service_name" {
-  value = aws_ecs_service.the_service.name
+  value = aws_ecs_service.the_ecs_service.name
 }

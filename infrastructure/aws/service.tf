@@ -67,7 +67,7 @@ resource "aws_ecs_task_definition" "the_task_definition" {
   ])
 }
 
-resource "aws_security_group" "service" {
+resource "aws_security_group" "the_service_sg" {
   name        = "${var.app_name}"
   description = "ECS Service security group"
   vpc_id      = local.vpc_id
@@ -101,7 +101,7 @@ resource "aws_ecs_service" "the_ecs_service" {
 
   network_configuration {
     subnets          = local.subnet_ids
-    security_groups  = [aws_security_group.service.id]
+    security_groups  = [aws_security_group.the_service_sg.id]
     assign_public_ip = true
   }
 
