@@ -1,25 +1,28 @@
 # Scenario
 The scenario is as follows:
-1. Qred’s developers are required to build new API’s consistently to achieve specific business objectives.
-2. The technical competence to specify and support the building of these API’s is currently a scarce resource, which slows the company down.
+1. Qred’s developers are required to build new APIs consistently to achieve specific business objectives.
+2. The technical competence to specify and support the building of these APIs is currently a scarce resource, which slows the company down.
 3. The mobile view shown in Appendix 1 is a frontend-view which lacks an API solution on the backend.
 4. The API definition and implementation can often occur too late in the SDLC which is something we would like to improve upon.
 5. Product Managers only have limited technical knowledge and require assistance in describing the technical implementation details for less experienced developers.
 6. The frontend-developers are competent and can be frustrated by delays in API availability
 7. We want work between frontend and backend to happen in parallel.
 
-# My understanding of the challenges
-It seems that the core problem is the growing business outpaces the capacity of the backend teams.
-Improving productivity of the backend developers would help solve the problem. 
-Hence [DORA](https://www.atlassian.com/devops/frameworks/dora-metrics) methodology is the framework I apply.
+# Understanding of the challenges
+It seems that the core problem is the growing business outpaces the capacity of the backend engineering teams.
 
-Our goal is to improve these 4 metrics:
+Improving productivity of the backend developers would help solve the problem. 
+
+Hence [DORA](https://www.atlassian.com/devops/frameworks/dora-metrics) framework is a suitable methodology to be applied in this case.
+
+Our goal is to improve these DORA metrics:
 - Frequency of deployments
 - Lead time for changes
 - Change failure rate
 - Time to recovery
-Also, I would like to add one more metric
-- time from idea to code
+
+Also, I would like to add one addtional metric:
+- Time from idea to code
 
 # To improve time from idea to code
 ## Use micro-services
@@ -28,8 +31,8 @@ Micro-services are much easier to understand and develop. Product managers can g
 It basically shifts the burden of understanding/managing complexity from developers to architects.
 
 ### Division of services
-So in this case, the service is divided into a few micro-services with a single responsibility.
-- The [account](https://github.com/lipingtababa/account/) micro-service 
+In this case, the service is divided into a few micro-services with a single responsibility.
+- The [Account](https://github.com/lipingtababa/account/) micro-service 
 - The [Invoice](https://github.com/lipingtababa/invoice) micro-service
 - The [Transaction](https://github.com/lipingtababa/transaction) micro-service
 - The [Card](https://github.com/lipingtababa/card) micro-service
@@ -41,21 +44,22 @@ So in this case, the service is divided into a few micro-services with a single 
 Also, a [rpc-client](./src/rpc_client.ts) is provided.
 
 ### Defining clear interfaces between micro-services and front/back-ends
-This is demostrated in 
-- the [OpenAPI Spec ](./openapi.yaml)
-- the [interfaces](./src/interfaces.ts) defined in typescript
-- the [validition of interfaces](./package.json#L15C1-L16C1)
+This is demostrated in:
+- The [OpenAPI Spec ](./openapi.yaml)
+- The [interfaces](./src/interfaces.ts) defined in typescript
+- The [validition of interfaces](./package.json#L15C1-L16C1)
 
-With interfaces well defined and respected, frontend and backend can work in paralle. 
+With interfaces well defined and respected, frontend and backend engineers are able to work in paralle. 
 
 # To improve lead time for changes
 ## Provide a one-click-away CICD pipeline out of box for a new project.
-This is demostrated in my github actions [workflow](./.github/workflows/service.yml)
+
+This is demostrated in the github actions [workflow](./.github/workflows/service.yml)
 
 ## Use infrastructure-as-code
 Everything is code:
 - The business logic
-- the infrastructure
+- The infrastructure
 - The access control policy
 - The configuration and secrets 
 - The pipelines themselves
@@ -81,9 +85,10 @@ A decent infrastructure architecture is provided out of box.
 ## To ensure scalability
 - A [healthcheck endpoint](./src/index.ts#L143) is required and checked.
 - Database foreign keys are not used.
+- All services are stateless.
 
 # To improve time to recovery
-- logs and metrics is provided out of box. Tracing can be enabled.
+- Logs and metrics is provided out of box. Tracing can be enabled.
 - A common logger is provided as a module.
 - In worst case, we can rebuild the whole system in another region.
 
