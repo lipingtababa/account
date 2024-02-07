@@ -8,4 +8,6 @@ locals {
   vpc_default_security_group_id = "sg-0e5a3cc3f26bbcc96"
 
   vpc_id = "vpc-0a520c498b461f697"
+
+  namespace_id = "ns-2kxtkn7qxlwrqzfs"
 }

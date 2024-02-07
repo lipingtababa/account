@@ -115,8 +115,31 @@ resource "aws_ecs_service" "the_ecs_service" {
     enable   = true
     rollback = true
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.discoverable_service.arn
+  }
 }
 
 resource "aws_cloudwatch_log_group" "the_log_group" {
   name = "/ecs/${var.app_name}"
 }
+
+# register so services can talk to each other
+resource "aws_service_discovery_service" "discoverable_service" {
+  name = "${var.app_name}"
+
+  dns_config {
+    namespace_id = local.namespace_id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+
+  health_check_custom_config {
+    failure_threshold = 1
+  }
+}
+
