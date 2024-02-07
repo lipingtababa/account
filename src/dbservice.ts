@@ -12,7 +12,7 @@ export class DBService {
     this.pool = new Pool.Pool({
       user: `db${process.env.APP_NAME}`,
       host: process.env.DB_HOST,
-      database: process.env.APP_NAME,
+      database: `db${process.env.APP_NAME}`,
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
       ssl: {
