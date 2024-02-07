@@ -26,13 +26,13 @@ businessApp.get('/account/overview/:accountid', async (req: Request, res: Respon
         const accountDetail = await dbService.getAccountDetail(accountId);
 
         const cards: Card[] = await rpcClient.getCardsByAccountId(accountId);
-        const transactions: TransactionsCollection = await rpcClient.getTransactionHistory(accountId, MAX_NUM_OF_TRANSACTIONS);
+        const transaction_collection: TransactionsCollection = await rpcClient.getTransactionHistory(accountId, MAX_NUM_OF_TRANSACTIONS);
         const invoices: Invoice[] = await rpcClient.getInvoices(accountId);
     
         const accountOverview: AccountOverview = {
             ...accountDetail,
             cards,
-            transactions,
+            transaction_collection,
             invoices
         };
 
@@ -84,7 +84,7 @@ businessApp.post('/customer/contact', (req: Request, res: Response) => {
     });
 });
 
-businessApp.get('/card/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/cards/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const dbClient = new DBService();
     const cards = await dbClient.getCardsByAccountId(accountid);
@@ -100,7 +100,7 @@ businessApp.get('/card/byaccountid/:accountid', async (req: Request, res: Respon
     });
 });
 
-businessApp.get('/invoice/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/invoices/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const dbClient = new DBService();
     const invoices = await dbClient.getInvoices(accountid);
@@ -111,7 +111,7 @@ businessApp.get('/invoice/byaccountid/:accountid', async (req: Request, res: Res
     });
 });
 
-businessApp.get('/transactions/byaccountid/:accountid', async (req: Request, res: Response) => {
+businessApp.get('/transactions/:accountid', async (req: Request, res: Response) => {
     const accountid = req.params.accountid;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : MAX_NUM_OF_TRANSACTIONS;
     const dbClient = new DBService();

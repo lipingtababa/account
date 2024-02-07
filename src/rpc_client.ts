@@ -3,30 +3,42 @@ import Axios, { AxiosInstance } from 'axios';
 import { logger } from './utils.js';
 
 export class RpcClient {
+    accountClient: AxiosInstance;
     cardsClient: AxiosInstance;
     transactionsClient: AxiosInstance;
     invoicesClient: AxiosInstance;
+    customerClient: AxiosInstance;
 
     constructor() {
-        this.cardsClient = Axios.create({
-            baseURL: 'http://cards:8080',
+        this.accountClient = Axios.create({
+            baseURL: 'http://account:80',
             timeout: 1000,
         });
 
         this.transactionsClient = Axios.create({
-            baseURL: 'http://transactions:8080',
+            baseURL: 'http://transaction:80',
+            timeout: 1000,
+        });
+
+        this.cardsClient = Axios.create({
+            baseURL: 'http://card:80',
             timeout: 1000,
         });
 
         this.invoicesClient = Axios.create({
-            baseURL: 'http://invoices:8080',
+            baseURL: 'http://invoice:80',
+            timeout: 1000,
+        });
+
+        this.customerClient = Axios.create({
+            baseURL: 'http://customer:80',
             timeout: 1000,
         });
     }
 
     async getCardsByAccountId(accountId: string): Promise<Card[]> {
         try {
-            const response = await this.cardsClient.get(`/card/byaccountid/${accountId}`);
+            const response = await this.cardsClient.get(`/card/${accountId}`);
             return response.data;
         } catch (error) {
             logger.debug(`Failed to get cards: ${error}`);
