@@ -12,27 +12,9 @@ INSERT INTO accounts (account_id, account_name, total_spend, remaining_spend) VA
 ('acc10', 'AI Research Labs', 1700.00, 1650.00);
 
 -- Add random data to the transactions table
-DO $$
-DECLARE
-  i INT;
-  random_sending_account_id VARCHAR(255);
-  random_receiving_account_id VARCHAR(255);
-  random_amount DECIMAL(10,2);
-  random_date TIMESTAMP;
-BEGIN
-  FOR i IN 1..1000 LOOP
-    -- Randomly select a sending_account_id
-    SELECT account_id INTO random_sending_account_id FROM accounts ORDER BY random() LIMIT 1;
-    -- Randomly select a receiving_account_id, ensuring it's different
-    LOOP
-      SELECT account_id INTO random_receiving_account_id FROM accounts ORDER BY random() LIMIT 1;
-      EXIT WHEN random_sending_account_id != random_receiving_account_id;
-    END LOOP;
-    -- Generate a random amount and date
-    random_amount := ROUND((random() * (1000-10) + 10)::numeric, 2); -- Random amount between 10 and 1000
-    random_date := NOW() - (ROUND(random() * 30) || ' days')::interval; -- Random date within the last 30 days
-    -- Insert the transaction
-    INSERT INTO transactions (transaction_id, sending_account_id, receiving_account_id, amount, date)
-    VALUES ('txn' || i, random_sending_account_id, random_receiving_account_id, random_amount, random_date);
-  END LOOP;
-END$$;
+INSERT INTO transactions (transaction_id, account_id, date, amount) VALUES
+('trans1', 'acc1', '2020-01-01', 100.00),
+('trans2', 'acc1', '2020-01-02', 200.00),
+('trans3', 'acc1', '2020-01-03', 300.00),
+('trans4', 'acc1', '2020-01-04', 400.00),
+('trans5', 'acc1', '2020-01-05', 500.00);

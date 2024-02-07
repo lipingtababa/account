@@ -39,7 +39,7 @@ export class RpcClient {
     async getCardsByAccountId(accountId: string): Promise<Card[]> {
         try {
             const response = await this.cardsClient.get(`/cards/${accountId}`);
-            return response.data;
+            return response.data.data;
         } catch (error) {
             logger.debug(`Failed to get cards: ${error}`);
             throw error;
@@ -49,7 +49,7 @@ export class RpcClient {
     async getTransactionHistory(accountId: string, limit: number): Promise<TransactionsCollection> {
         try {
             const response = await this.transactionsClient.get(`/transactions/${accountId}?limit=${limit}`);
-            return response.data;
+            return response.data.data;
         } catch (error) {
             logger.debug(`Failed to get transaction history: ${error}`);
             throw error;
@@ -59,7 +59,7 @@ export class RpcClient {
     async getInvoices(accountId: string): Promise<Invoice[]> {
         try {
             const response = await this.invoicesClient.get(`/invoices/${accountId}`);
-            return response.data;
+            return response.data.data;
         } catch (error) {
             logger.debug(`Failed to get invoices: ${error}`);
             throw error;

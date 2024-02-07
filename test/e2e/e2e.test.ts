@@ -32,7 +32,15 @@ describe('account service', () => {
       .then(r => {
         expect(r.data).toBeDefined();
         expect(r.status).toBe(200);
-        expect(r.data.data.account_id).toBe("acc1");
+        expect(r.data.data).toBeDefined();
+        const realData = r.data.data;
+
+        expect(realData.account_id).toBe("acc1");
+        expect(realData.transaction_collection).toBeDefined();
+        expect(realData.transaction_collection.transactions).toBeDefined();
+        expect(realData.transaction_collection.transactions.length).toBeGreaterThan(0);
+        expect(realData.cards.length).toBe(0);
+        expect(realData.invoices.length).toBe(0);
       })
       .catch(e => {
         logger.error(e);
