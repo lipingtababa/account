@@ -3,26 +3,43 @@ import axios from 'axios';
 import { logger } from '../../src/utils.js';
 
 describe('account service', () => {
-    test('Account service should be up and running', async() => {
-        const apiUrl = "http://account-182883838.us-east-1.elb.amazonaws.com:80/ping";
-        await axios.get(apiUrl)
-          .then(r => {
-            expect(r.data).toBeDefined();
-            expect(r.status).toBe(200);
-          })
-          .catch(e => {
-            logger.error(e);
-            expect(e).toBeNull();
-          });
-      });
+  const domain = "http://account-182883838.us-east-1.elb.amazonaws.com:80";
 
-      test('It should return 404 if no account', async() => {
-        const apiUrl = "http://account-182883838.us-east-1.elb.amazonaws.com:80/account/overview/nonexistent";
-        await axios.get(apiUrl).catch(e => {
-            logger.error(e);
-            expect(e.response.status).toBe(404);
-          });
+  test('Account service should be up and running', async() => {
+    const apiUrl = domain+"/ping";
+    await axios.get(apiUrl)
+      .then(r => {
+        expect(r.data).toBeDefined();
+        expect(r.status).toBe(200);
+      })
+      .catch(e => {
+        logger.error(e);
+        expect(e).toBeNull();
       });
+  });
+
+  test('It should return 404 if no account', async() => {
+    const apiUrl = domain+"/account/overview/nonexistent";
+    await axios.get(apiUrl).catch(e => {
+        logger.error(e);
+        expect(e.response.status).toBe(404);
+      });
+  });
+
+  test('Account service should return correct account overview', async() => {
+    const apiUrl = domain+"/account/overview/acc1";
+    await axios.get(apiUrl)
+      .then(r => {
+        expect(r.data).toBeDefined();
+        expect(r.status).toBe(200);
+        expect(r.data.data.account_id).toBe("acc1");
+      })
+      .catch(e => {
+        logger.error(e);
+        expect(e).toBeNull();
+      });
+  });
+
 });
 
 
