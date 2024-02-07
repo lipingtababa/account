@@ -67,6 +67,7 @@ Everything is code:
 
 # To improve frequency of deployments and change failure rate
 One thing that stops less experienced developers from releasing is the fear of casuing incidents.
+
 To mitigate the fear, we should ensure that systems are reliable, secure and scalable out of box.
 
 ## To improve general code quality
