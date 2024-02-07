@@ -61,7 +61,8 @@ Everything is code:
 - The business logic
 - The infrastructure
 - The access control policy
-- The configuration and secrets 
+- The configuration and secrets
+- The test data
 - The pipelines themselves
 
 # To improve frequency of deployments and change failure rate
