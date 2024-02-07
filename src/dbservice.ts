@@ -10,7 +10,7 @@ export class DBService {
 
   constructor() {
     this.pool = new Pool.Pool({
-      user: process.env.APP_NAME,
+      user: `db${process.env.APP_NAME}`,
       host: process.env.DB_HOST,
       database: process.env.APP_NAME,
       password: process.env.DB_PASSWORD,

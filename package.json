@@ -13,7 +13,7 @@
     "build": "tsc",
     "start": "node --trace-warnings dist/src/index.js",
     "lint": "swagger-cli validate openapi.yaml; eslint . --ext .ts",
-    "test": "jest dist/test/*.test.js",
+    "test": "jest dist/test/**/*.test.js",
     "clean": "rm -rf dist node_modules"
   },
   "babel": {
