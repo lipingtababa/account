@@ -1,6 +1,6 @@
 # Scenario
 The scenario is as follows:
-1. Qred’s developers are required to build new APIs consistently to achieve specific business objectives.
+1. Developers are required to build new APIs consistently to achieve specific business objectives.
 2. The technical competence to specify and support the building of these APIs is currently a scarce resource, which slows the company down.
 3. The mobile view shown in Appendix 1 is a frontend-view which lacks an API solution on the backend.
 4. The API definition and implementation can often occur too late in the SDLC which is something we would like to improve upon.
@@ -97,7 +97,7 @@ A decent infrastructure architecture is provided out of box.
 # TODO
 - Run db operations and S3 presigned-url operation in parallel.
 - Refine IAM policies to apply least-priviledges-principle.
-- Use flyaway or liquibase to integrate DB management into the CI/CD pipeline. At this moment, tables are created manually.
+- Use flyaway or liquibase to integrate DB management into the CI/CD pipeline. At this moment, tables are created [manually](./init/db_tables.sql).
 - Add customized security groups for containers and DBs.
 - The infrastructure should be split into 3 parts: the foundation(ECR, cluster), the service, the dependencies(DB, S3)
 - HTTPS is not used since certificate doesn't use a pay-as-you-use pricing model.
