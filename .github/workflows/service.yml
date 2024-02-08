@@ -60,7 +60,9 @@ jobs:
           cd infrastructure/aws
           envsubst <  provider.tf.tpl >provider.tf
           terraform init
-          terraform apply -auto-approve \
+          terraform destroy -auto-approve 
+          # terraform apply -auto-approve \
+          terraform destroy -auto-approve 
                 -var "aws_region=${{ env.AWS_REGION }}" \
                 -var "aws_account=${{ env.AWS_ACCOUNT }}" \
                 -var "stage=${{ env.STAGE}}" \
