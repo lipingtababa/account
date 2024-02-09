@@ -93,6 +93,8 @@ A decent infrastructure architecture is provided out of box.
 - Logs and metrics is provided out of box. Tracing can be enabled.
 - A common logger is provided as a module.
 - In worst case, we can rebuild the whole system in another region.
+- All the code and artifacts are version controlled.
+- DB performance insight can be enabled if needed.
 
 # TODO
 - Run db operations and S3 presigned-url operation in parallel.

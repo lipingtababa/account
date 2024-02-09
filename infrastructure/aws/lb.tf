@@ -5,7 +5,7 @@ resource "aws_lb" "lb" {
   subnets            = local.subnet_ids
   security_groups    = [aws_security_group.alb.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Environment = "${var.stage}"
